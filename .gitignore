@@ -1,0 +1,5 @@
+*.sublime-workspace
+build/
+project.sublime-project
+*.bin
+.vscode/
