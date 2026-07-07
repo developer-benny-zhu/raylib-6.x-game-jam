@@ -9,20 +9,20 @@ WINDOW_WIDTH :: 800
 WINDOW_HEIGHT :: 600
 WINDOW_TITLE :: "Hex Arena"
 FPS :: 60
-world: World
+game_state: Game_State
 init :: proc() {
 	run = true
 	raylib.SetConfigFlags({.WINDOW_RESIZABLE, .VSYNC_HINT})
 	raylib.InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE)
 	raylib.SetTargetFPS(FPS)
-	world_init(&world)
+	game_state_init(&game_state)
 }
 
 update :: proc() {
-	world_update(&world)
+	game_state_update(&game_state)
 	raylib.BeginDrawing()
 	raylib.ClearBackground(raylib.RAYWHITE)
-	raylib.BeginMode3D(world.player.camera)
+	raylib.BeginMode3D(game_state.player.camera)
 	raylib.DrawGrid(20, 1.0)
     raylib.DrawCube({0.0, 1.0, 0.0}, 2.0, 2.0, 2.0, raylib.BLUE)
     raylib.DrawCubeWires({0.0, 1.0, 0.0}, 2.0, 2.0, 2.0, raylib.DARKBLUE)
