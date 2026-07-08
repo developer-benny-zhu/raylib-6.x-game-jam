@@ -11,6 +11,7 @@ Game_State :: struct {
 	player:      Player,
 	camera:      raylib.Camera3D,
 	camera_mode: Camera_Mode,
+	assets: Assets
 }
 
 camera_update :: proc(game_state: ^Game_State) {
@@ -25,10 +26,15 @@ game_state_init :: proc(game_state: ^Game_State) {
 	game_state.camera.fovy = 60
 	game_state.camera.projection = .PERSPECTIVE
 	game_state.camera.up = {0, 1, 0}
+	assets_init(&game_state.assets)
 	player_init(&game_state.player)
 }
 
 game_state_update :: proc(game_state: ^Game_State, delta_time: f32) {
 	camera_update(game_state)
 	player_update(&game_state.player, delta_time)
+}
+
+game_state_destroy :: proc(game_state: ^Game_State) {
+	assets_destroy(&game_state.assets)
 }
