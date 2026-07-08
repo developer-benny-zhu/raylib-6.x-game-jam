@@ -9,7 +9,8 @@ Camera_Mode :: enum u8 {
 
 Game_State :: struct {
 	player:      Player,
-	camera:      raylib.Camera3D,
+	world_camera:      raylib.Camera3D,
+	view_model_camera: raylib.Camera3D,
 	camera_mode: Camera_Mode,
 	assets: Assets
 }
@@ -17,15 +18,24 @@ Game_State :: struct {
 camera_update :: proc(game_state: ^Game_State) {
 	switch game_state.camera_mode {
 	case .First_Person:
-		game_state.camera.position = player_head_position(game_state.player)
-		game_state.camera.target =
-			game_state.camera.position + player_forward_direction(game_state.player)
+		game_state.world_camera.position = player_head_position(game_state.player)
+		game_state.world_camera.target =
+			game_state.world_camera.position + player_forward_direction(game_state.player)
 	}
 }
+
+view_model_camera_init :: proc(camera_3d: ^raylib.Camera3D) {
+	camera_3d.target = {0, 0, -1}
+	camera_3d.up = {0, 1, 0}
+	camera_3d.fovy = 60
+	camera_3d.projection = .PERSPECTIVE
+}
+
 game_state_init :: proc(game_state: ^Game_State) {
-	game_state.camera.fovy = 60
-	game_state.camera.projection = .PERSPECTIVE
-	game_state.camera.up = {0, 1, 0}
+	game_state.world_camera.fovy = 60
+	game_state.world_camera.projection = .PERSPECTIVE
+	game_state.world_camera.up = {0, 1, 0}
+	view_model_camera_init(&game_state.view_model_camera)
 	assets_init(&game_state.assets)
 	player_init(&game_state.player)
 }
