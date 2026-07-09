@@ -40,38 +40,50 @@ splash_screen_draw :: proc(splash_screen: Splash_Screen, assets: Assets) {
 	case LOGO_SCREEN_START ..< LOGO_SCREEN_END:
 		raylib.ClearBackground(raylib.BLACK)
 		color := LOGO_SCREEN_FONT_COlOR
-		update_fade(&color, splash_screen.timer, LOGO_SCREEN_START, LOGO_SCREEN_END, TRANSITION_TIME)
-		width := raylib.MeasureText(LOGO_SCREEN_TEXT, LOGO_SCREEN_FONT_SIZE)
-		height := LOGO_SCREEN_FONT_SIZE
-		position_x := (raylib.GetScreenWidth() - i32(width)) / 2
-		position_y := (raylib.GetScreenHeight() - i32(height)) / 2
-		raylib.DrawText(LOGO_SCREEN_TEXT, position_x, position_y, LOGO_SCREEN_FONT_SIZE, color)
+		update_fade(
+			&color,
+			splash_screen.timer,
+			LOGO_SCREEN_START,
+			LOGO_SCREEN_END,
+			TRANSITION_TIME,
+		)
+		draw_text(
+			LOGO_SCREEN_TEXT,
+			{f32(raylib.GetScreenWidth()) / 2, f32(raylib.GetScreenHeight()) / 2},
+			raylib.GetFontDefault(),
+			LOGO_SCREEN_FONT_SIZE,
+			.Center,
+			tint = color,
+		)
 	case MADE_WITH_SCREEN_START ..= MADE_WITH_SCREEN_END:
 		raylib.ClearBackground(raylib.BLACK)
 		color := MADE_WITH_SCREEN_FONT_COLOR
-		update_fade(&color, splash_screen.timer, MADE_WITH_SCREEN_START, MADE_WITH_SCREEN_END, TRANSITION_TIME)
-		text_width := raylib.MeasureText(MADE_WITH_SCREEN_TEXT, MADE_WITH_SCREEN_FONT_SIZE)
-		text_height := MADE_WITH_SCREEN_FONT_SIZE
-
-		position_x := (raylib.GetScreenWidth() - i32(text_width)) / 2
-		position_y := ((raylib.GetScreenHeight() - i32(text_height)) / 2) - 200
-		raylib.DrawText(
+		update_fade(
+			&color,
+			splash_screen.timer,
+			MADE_WITH_SCREEN_START,
+			MADE_WITH_SCREEN_END,
+			TRANSITION_TIME,
+		)
+		draw_text(
 			MADE_WITH_SCREEN_TEXT,
-			position_x,
-			position_y,
+			{f32(raylib.GetScreenWidth() / 2), f32(raylib.GetScreenHeight() / 2 - 200)},
+			raylib.GetFontDefault(),
 			MADE_WITH_SCREEN_FONT_SIZE,
-			color,
+			.Center,
+			tint = color,
 		)
-
-
-		raylib.DrawTexturePro(
-			assets.ginger_bill,
-			{0, 0, f32(assets.ginger_bill.width), f32(assets.ginger_bill.height)},
-			{f32(raylib.GetScreenWidth()) / 2, f32(raylib.GetScreenHeight()) / 2, 272, 304.25},
-			{272 / 2, 304.25 / 2},
+		source := raylib.Rectangle {
 			0,
-			{255, 255, 255, color.a},
-		)
+			0,
+			f32(assets.ginger_bill.width),
+			f32(assets.ginger_bill.height),
+		}
+		position := linalg.Vector2f32 {
+			f32(raylib.GetScreenWidth()) / 2,
+			f32(raylib.GetScreenHeight()) / 2,
+		}
+		draw_texture(assets.ginger_bill, source, position, .Center, tint = color, scale = {0.25, 0.25})
 
 
 	}
