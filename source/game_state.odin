@@ -6,18 +6,26 @@ Camera_Mode :: enum u8 {
 	First_Person,
 }
 
-
-Game_State :: struct {
-	player:      Player,
-	world_camera:      raylib.Camera3D,
-	view_model_camera: raylib.Camera3D,
-	view_model: View_Model,
-	camera_mode: Camera_Mode,
-	assets: Assets,
-	crosshair: Crosshair
+Scene :: enum u8 {
+	Splash_Screen,
+	Main_Menu,
+	Game,
 }
 
-camera_update :: proc(game_state: ^Game_State) {
+
+Game_State :: struct {
+	scene:             Scene,
+	splash_screen:     Splash_Screen,
+	player:            Player,
+	world_camera:      raylib.Camera3D,
+	view_model_camera: raylib.Camera3D,
+	view_model:        View_Model,
+	camera_mode:       Camera_Mode,
+	assets:            Assets,
+	crosshair:         Crosshair,
+}
+
+world_camera_update :: proc(game_state: ^Game_State) {
 	switch game_state.camera_mode {
 	case .First_Person:
 		game_state.world_camera.position = player_head_position(game_state.player)
@@ -44,7 +52,7 @@ game_state_init :: proc(game_state: ^Game_State) {
 }
 
 game_state_update :: proc(game_state: ^Game_State, delta_time: f32) {
-	camera_update(game_state)
+	world_camera_update(game_state)
 	player_update(&game_state.player, delta_time)
 }
 

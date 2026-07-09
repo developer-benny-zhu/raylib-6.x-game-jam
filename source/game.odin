@@ -9,35 +9,23 @@ WINDOW_WIDTH :: 800
 WINDOW_HEIGHT :: 600
 WINDOW_TITLE :: "Hex Arena"
 FPS :: 60
+splash_screen: Splash_Screen
+
+
 game_state: Game_State
 init :: proc() {
 	run = true
 	raylib.SetConfigFlags({.WINDOW_RESIZABLE, .VSYNC_HINT})
 	raylib.InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE)
 	raylib.SetTargetFPS(FPS)
+
 	game_state_init(&game_state)
 }
 
 update :: proc() {
-	game_state_update(&game_state, raylib.GetFrameTime())
-	raylib.BeginDrawing()
-	raylib.ClearBackground(raylib.RAYWHITE)
-	raylib.BeginMode3D(game_state.world_camera)
-	raylib.DrawGrid(20, 1.0)
-	raylib.DrawCube({0.0, 1.0, 0.0}, 2.0, 2.0, 2.0, raylib.BLUE)
-	raylib.DrawCubeWires({0.0, 1.0, 0.0}, 2.0, 2.0, 2.0, raylib.DARKBLUE)
-	raylib.EndMode3D()
-
-
-	update_view_model_animation(&game_state.view_model, game_state.player, raylib.GetFrameTime())
-
-	raylib.BeginMode3D(game_state.view_model_camera)
-	draw_view_model(game_state.view_model, game_state.assets)
-	raylib.EndMode3D()
-
-	crosshair_draw(game_state.crosshair)
-
-	raylib.EndDrawing()
+	delta_time := raylib.GetFrameTime()
+	splash_screen_update(&splash_screen, delta_time)
+	splash_screen_draw(splash_screen, game_state.assets)
 	free_all(context.temp_allocator)
 }
 
