@@ -25,7 +25,7 @@ MADE_WITH_SCREEN_FONT_SIZE :: 32
 
 TRANSITION_TIME :: 0.3
 
- // HOLY hard coding, good thing im never touching this code ever again in my life... maybe... if my OCD doesn't get to me
+// HOLY hard coding, good thing im never touching this code ever again in my life... maybe... if my OCD doesn't get to me
 
 Splash_Screen :: struct {
 	timer: f32,
@@ -40,15 +40,7 @@ splash_screen_draw :: proc(splash_screen: Splash_Screen, assets: Assets) {
 	case LOGO_SCREEN_START ..< LOGO_SCREEN_END:
 		raylib.ClearBackground(raylib.BLACK)
 		color := LOGO_SCREEN_FONT_COlOR
-		if splash_screen.timer < LOGO_SCREEN_START + TRANSITION_TIME {
-			fade_in(&color, splash_screen.timer - LOGO_SCREEN_START, TRANSITION_TIME)
-		} else if splash_screen.timer > LOGO_SCREEN_END - TRANSITION_TIME {
-			fade_out(
-				&color,
-				splash_screen.timer - (LOGO_SCREEN_END - TRANSITION_TIME),
-				TRANSITION_TIME,
-			)
-		}
+		update_fade(&color, splash_screen.timer, LOGO_SCREEN_START, LOGO_SCREEN_END, TRANSITION_TIME)
 		width := raylib.MeasureText(LOGO_SCREEN_TEXT, LOGO_SCREEN_FONT_SIZE)
 		height := LOGO_SCREEN_FONT_SIZE
 		position_x := (raylib.GetScreenWidth() - i32(width)) / 2
@@ -57,16 +49,7 @@ splash_screen_draw :: proc(splash_screen: Splash_Screen, assets: Assets) {
 	case MADE_WITH_SCREEN_START ..= MADE_WITH_SCREEN_END:
 		raylib.ClearBackground(raylib.BLACK)
 		color := MADE_WITH_SCREEN_FONT_COLOR
-		if splash_screen.timer < MADE_WITH_SCREEN_START + TRANSITION_TIME {
-			elapsed := splash_screen.timer - MADE_WITH_SCREEN_START
-			fade_in(&color, elapsed, TRANSITION_TIME)
-		} else if splash_screen.timer > MADE_WITH_SCREEN_END - TRANSITION_TIME {
-			fade_out(
-				&color,
-				splash_screen.timer - (MADE_WITH_SCREEN_END - TRANSITION_TIME),
-				TRANSITION_TIME,
-			)
-		}
+		update_fade(&color, splash_screen.timer, MADE_WITH_SCREEN_START, MADE_WITH_SCREEN_END, TRANSITION_TIME)
 		text_width := raylib.MeasureText(MADE_WITH_SCREEN_TEXT, MADE_WITH_SCREEN_FONT_SIZE)
 		text_height := MADE_WITH_SCREEN_FONT_SIZE
 
@@ -79,7 +62,6 @@ splash_screen_draw :: proc(splash_screen: Splash_Screen, assets: Assets) {
 			MADE_WITH_SCREEN_FONT_SIZE,
 			color,
 		)
-
 
 
 		raylib.DrawTexturePro(
@@ -109,4 +91,19 @@ fade_in :: proc(color: ^raylib.Color, elapsed: f32, duration: f32) {
 fade_out :: proc(color: ^raylib.Color, elapsed: f32, duration: f32) {
 	t: f32 = math.clamp(elapsed / duration, 0.0, 1.0)
 	color.a = u8(linalg.lerp(f32(255), f32(0), t))
+}
+
+
+update_fade :: proc(
+	color: ^raylib.Color,
+	time: f32,
+	start_time: f32,
+	end_time: f32,
+	duration: f32,
+) {
+	if time < start_time + duration {
+		fade_in(color, time - start_time, duration)
+	} else if time > end_time - duration {
+		fade_out(color, time - (end_time - duration), duration)
+	}
 }
