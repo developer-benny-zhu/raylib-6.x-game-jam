@@ -3,13 +3,18 @@ package game
 import "core:math/linalg"
 import "vendor:raylib"
 
-@(private = "file")
 credits_scroll_time: f32 = 0.0
 
+credits_init :: proc(game_state: ^Game_State) {
+	raylib.PlayMusicStream(game_state.assets.credits_music)
+}
+
 credits_update :: proc(game_state: ^Game_State) {
+	raylib.UpdateMusicStream(game_state.assets.credits_music)
 	if raylib.IsKeyPressed(raylib.KeyboardKey.ESCAPE) {
 		credits_scroll_time = 0.0
 		game_state.scene = .Main_Menu
+		raylib.StopMusicStream(game_state.assets.credits_music)
 		main_menu_init(&game_state.main_menu, game_state)
 	}
 
@@ -29,15 +34,40 @@ credits_update :: proc(game_state: ^Game_State) {
 	current_y := start_y
 	font := raylib.GetFontDefault()
 
+	// Title
 	draw_text("CREDITS", {screen_center.x, current_y}, font, 48, .Center)
-	current_y += 80
+	current_y += 90
 
+	// Art
 	draw_text("Graphics & Art", {screen_center.x, current_y}, font, 24, .Center)
 	current_y += 35
 	draw_text("Big thanks to Kenney (kenney.nl)", {screen_center.x, current_y}, font, 32, .Center)
 	draw_text("for the amazing game assets.", {screen_center.x, current_y + 35}, font, 32, .Center)
 	current_y += 120
 
+	// Audio
+	draw_text("Music & Sound", {screen_center.x, current_y}, font, 24, .Center)
+	current_y += 35
+	draw_text(
+		"NES Shooter Music by SketchyLogic",
+		{screen_center.x, current_y},
+		font,
+		32,
+		.Center,
+	)
+	current_y += 35
+	draw_text(
+		"BJM Credits Loop by BeansJam Mobile 2018/R.A.W.808",
+		{screen_center.x, current_y},
+		font,
+		32,
+		.Center,
+	)
+	current_y += 35
+	draw_text("via OpenGameArt.org", {screen_center.x, current_y}, font, 24, .Center)
+	current_y += 120
+
+	// Tech
 	draw_text("Built With", {screen_center.x, current_y}, font, 24, .Center)
 	current_y += 35
 	draw_text(
@@ -47,8 +77,41 @@ credits_update :: proc(game_state: ^Game_State) {
 		32,
 		.Center,
 	)
-	current_y += 150
+	current_y += 100
 
+	// Web Template
+	draw_text("Web Deployment", {screen_center.x, current_y}, font, 24, .Center)
+	current_y += 35
+	draw_text("Karl Zeylinski", {screen_center.x, current_y}, font, 32, .Center)
+	current_y += 35
+	draw_text(
+		"for the Raylib Web Template in Odin",
+		{screen_center.x, current_y},
+		font,
+		24,
+		.Center,
+	)
+	current_y += 120
+
+	// Special Thanks (The Bills)
+	draw_text("Special Thanks", {screen_center.x, current_y}, font, 24, .Center)
+	current_y += 35
+	draw_text(
+		"Ginger Bill For Odin",
+		{screen_center.x, current_y},
+		font,
+		32,
+		.Center,
+	)
+	current_y += 35
+	draw_text(
+		"Raysan for Raylib",
+		{screen_center.x, current_y},
+		font,
+		32,
+		.Center,
+	)
+	current_y += 35
 	if current_y < -50 {
 		credits_scroll_time = 0
 	}

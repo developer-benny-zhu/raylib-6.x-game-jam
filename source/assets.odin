@@ -17,6 +17,7 @@ Assets :: struct {
 
 	menu_music: raylib.Music,
 	game_music: raylib.Music,
+	credits_music: raylib.Music
 }
 
 assets_init :: proc(assets: ^Assets) {
@@ -34,6 +35,8 @@ assets_init :: proc(assets: ^Assets) {
 	assets.game_music.looping = true
 	assets.menu_music = raylib.LoadMusicStream("assets/game_music.ogg")
 	assets.game_music.looping = true
+	assets.credits_music = raylib.LoadMusicStream("assets/credits_music.ogg")
+	assets.credits_music.looping = true
 }
 
 assets_destroy :: proc(assets: ^Assets) {
@@ -49,4 +52,5 @@ assets_destroy :: proc(assets: ^Assets) {
 
 	raylib.UnloadMusicStream(assets.game_music)
 	raylib.UnloadMusicStream(assets.menu_music)
+	raylib.UnloadMusicStream(assets.credits_music)
 }

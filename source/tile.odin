@@ -215,7 +215,6 @@ Tile :: struct {
 
 tile_init_procedural :: proc(tile: ^Tile, elevation: f32) {
 	tile.team = .None
-
 	mars_pool := [8]Tile_Kind {
 		.Mars_07,
 		.Mars_12,
@@ -226,19 +225,7 @@ tile_init_procedural :: proc(tile: ^Tile, elevation: f32) {
 		.Mars_17,
 		.Mars_18,
 	}
-
-	scifi_hubs := [3]Tile_Kind{.Scifi_Base, .Scifi_Domes, .Scifi_Living}
-	scifi_towers := [3]Tile_Kind{.Scifi_Energy, .Scifi_Skyscraper, .Scifi_Tower}
-
-	if elevation < 0.35 {
-		tile.kind = mars_pool[rand.int_max(len(mars_pool))]
-	} else if elevation < 0.50 {
-		tile.kind = scifi_hubs[rand.int_max(len(scifi_hubs))]
-	} else if elevation < 0.78 {
-		tile.kind = mars_pool[rand.int_max(len(mars_pool))]
-	} else {
-		tile.kind = scifi_towers[rand.int_max(len(scifi_towers))]
-	}
+	tile.kind = mars_pool[rand.int_max(len(mars_pool))]
 }
 
 tile_draw :: proc(

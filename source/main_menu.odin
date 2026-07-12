@@ -101,6 +101,7 @@ main_menu_update :: proc(menu: ^Main_Menu, game_state: ^Game_State) {
 
 	if button(credits_rect, "CREDITS", button_style) {
 		raylib.StopMusicStream(game_state.assets.menu_music)
+        credits_init(game_state)
 		game_state.scene = .Credits
 	}
 
