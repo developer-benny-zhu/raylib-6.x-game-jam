@@ -11,6 +11,7 @@ World :: struct {
     grid: Grid,
     camera: Camera_2D,
     zoom: f32,
+    dialog: Dialog,
     selected_row: int,
     selected_column: int,
 }
@@ -21,6 +22,7 @@ world_init :: proc(world: ^World) {
     world.camera = Camera_2D {}
     camera_2d_init(&world.camera)
     world.zoom = 1
+    dialog_init(&world.dialog)
     world.selected_row = -1
     world.selected_column = -1
 }
@@ -38,6 +40,16 @@ world_update :: proc(world: ^World, game_state: ^Game_State) {
     } else if gesture == {raylib.Gestures.PINCH_OUT} {
         zoom_change += 0.02
     }
+	if raylib.IsKeyPressed(raylib.KeyboardKey.E) {
+		if world.dialog.active {
+			dialog_advance(&world.dialog)
+		} else {
+			dialog_open(&world.dialog)
+		}
+	}
+	if world.dialog.active && (raylib.IsKeyPressed(raylib.KeyboardKey.SPACE) || raylib.IsMouseButtonPressed(.LEFT)) {
+		dialog_advance(&world.dialog)
+	}
     world.camera.zoom = (f32(raylib.GetScreenHeight()) / f32(VIRTUAL_SCREEN_HEIGHT)) * world.zoom
     if zoom_change != 0 {
         mouse_position := raylib.GetMousePosition()
@@ -61,7 +73,7 @@ world_update :: proc(world: ^World, game_state: ^Game_State) {
         world.camera.velocity.x = CAMERA_SPEED * raylib.GetFrameTime()
     }
     camera_2d_update(&world.camera)
-    if raylib.IsMouseButtonPressed(.LEFT) {
+	if !world.dialog.active && raylib.IsMouseButtonPressed(.LEFT) {
         mouse_position := raylib.GetScreenToWorld2D(raylib.GetMousePosition(), world.camera)
         found := false
         for row, row_index in world.grid.tiles {
@@ -90,5 +102,6 @@ world_update :: proc(world: ^World, game_state: ^Game_State) {
         }
     }
     raylib.EndMode2D()
+	dialog_draw(world.dialog)
     raylib.EndDrawing()
 }
