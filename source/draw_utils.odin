@@ -65,3 +65,40 @@ draw_texture :: proc(
 	}
 	raylib.DrawTexturePro(texture, source, destination, origin_value, rotation, tint)
 }
+
+draw_text :: proc(
+	text: cstring,
+	position: linalg.Vector2f32,
+	font: raylib.Font,
+	font_size: f32,
+	$origin: Origin,
+	rotation: f32 = 0,
+	tint := raylib.WHITE,
+	spacing: f32 = 2,
+) {
+	text_size := raylib.MeasureTextEx(font, text, font_size, spacing)
+	when origin == .Center {
+		raylib.DrawTextPro(font, text, position, text_size / 2, rotation, font_size, spacing, tint)
+	}
+	when origin == .Top_Left {
+		raylib.DrawTextPro(font, text, position, {0, 0}, rotation, font_size, spacing, tint)
+	}
+	when origin == .Top_Right {
+		raylib.DrawTextPro(
+			font,
+			text,
+			position,
+			{text_size.x, 0},
+			rotation,
+			font_size,
+			spacing,
+			tint,
+		)
+	}
+	when origin == .Bottom_Left {
+		raylib.DrawTextPro(font, text, position, {0, size.y}, rotation, font_size, spacing, tint)
+	}
+	when origin == .Bottom_Right {
+		raylib.DrawTextPro(font, text, position, text_size, rotation, font_size, spacing, tint)
+	}
+}
