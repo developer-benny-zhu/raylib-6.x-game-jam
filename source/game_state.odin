@@ -4,6 +4,7 @@ Scene :: enum {
 	Splash,
 	Main_Menu,
 	World,
+	Credits
 }
 
 Game_State :: struct {
@@ -30,6 +31,8 @@ game_state_update :: proc(game_state: ^Game_State) {
 		main_menu_update(&game_state.main_menu, game_state)
 	case .World:
 		world_update(&game_state.world, game_state)
+	case .Credits:
+		credits_update(game_state)
 	}
 }
 
