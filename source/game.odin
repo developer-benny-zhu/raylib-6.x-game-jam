@@ -31,6 +31,7 @@ parent_window_size_changed :: proc(width: int, height: int) {
 }
 
 shutdown :: proc() {
+	raylib.CloseAudioDevice()
 	raylib.CloseWindow()
 }
 

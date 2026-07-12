@@ -8,11 +8,13 @@ Main_Menu :: struct {
     play_button: Texture_Button,
 }
 
-main_menu_init :: proc(menu: ^Main_Menu) {
+main_menu_init :: proc(menu: ^Main_Menu, game_state: ^Game_State) {
+    raylib.PlayMusicStream(game_state.assets.menu_music)
     menu.play_button = Texture_Button{}
 }
 
 main_menu_update :: proc(menu: ^Main_Menu, game_state: ^Game_State) {
+    raylib.UpdateMusicStream(game_state.assets.menu_music)
     raylib.BeginDrawing()
     raylib.ClearBackground(raylib.BLACK)
 
@@ -43,6 +45,7 @@ main_menu_update :: proc(menu: ^Main_Menu, game_state: ^Game_State) {
     }
 
     if texture_button_update(&menu.play_button, game_state.assets.button_tile, source, "PLAY", 20 * scale, raylib.WHITE) {
+        raylib.StopMusicStream(game_state.assets.menu_music)
         game_state.scene = .World
     }
 

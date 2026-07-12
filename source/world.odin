@@ -27,7 +27,8 @@ World :: struct {
     ai_spawn_done: bool,
 }
 
-world_init :: proc(world: ^World) {
+world_init :: proc(world: ^World, game_state: ^Game_State) {
+    raylib.PlayMusicStream(game_state.assets.game_music)
     world.grid = Grid {}
     grid_init(&world.grid)
     world.camera = Camera_2D {}
@@ -374,6 +375,7 @@ world_draw_spawn_buttons :: proc(world: ^World, game_state: ^Game_State) {
 }
 
 world_update :: proc(world: ^World, game_state: ^Game_State) {
+    raylib.UpdateMusicStream(game_state.assets.game_music)
     world.camera.velocity = {}
     for index in 0 ..< world.unit_count {
         unit_update(&world.units[index])

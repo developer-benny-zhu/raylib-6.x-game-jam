@@ -17,8 +17,8 @@ Game_State :: struct {
 game_state_init :: proc(game_state: ^Game_State) {
 	assets_init(&game_state.assets)
 	splash_screen_init(&game_state.splash)
-	main_menu_init(&game_state.main_menu)
-	world_init(&game_state.world)
+	main_menu_init(&game_state.main_menu, game_state)
+	world_init(&game_state.world, game_state)
 	game_state.scene = .Splash
 }
 

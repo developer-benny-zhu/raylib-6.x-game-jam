@@ -7,7 +7,7 @@ import "vendor:raylib"
 Unit_Kind :: enum {
     Peasant,
     Footman,
-    Wizard
+    Wizard,
 }
 
 Unit :: struct {
