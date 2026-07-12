@@ -63,19 +63,15 @@ world_init :: proc(world: ^World, game_state: ^Game_State) {
 	world.selected_unit_index = -1
 	world.ai_spawn_done = false
 
-	world.player_base_row = GRID_SIZE_Y - 1
-	world.player_base_column = 0
-	world.enemy_base_row = 0
-	world.enemy_base_column = GRID_SIZE_X - 1
-
-	for row_index in 0 ..< GRID_SIZE_Y {
-		for column_index in 0 ..< GRID_SIZE_X {
-			if world.grid.tiles[row_index][column_index].team == .Player {
-				world.camera.target = grid_tile_position(row_index, column_index)
-				return
-			}
-		}
-	}
+    world.player_base_row = GRID_SIZE_Y - 1
+    world.player_base_column = 0
+    world.enemy_base_row = 0
+    world.enemy_base_column = GRID_SIZE_X - 1
+    world.camera.target = grid_tile_position(world.player_base_row, world.player_base_column)
+    world.camera.offset = {
+        f32(raylib.GetScreenWidth()) / 2,
+        f32(raylib.GetScreenHeight()) / 2,
+    }
 }
 
 world_end_turn :: proc(world: ^World) {

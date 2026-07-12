@@ -90,6 +90,8 @@ main_menu_update :: proc(menu: ^Main_Menu, game_state: ^Game_State) {
 	if button(play_rect, "PLAY", button_style) {
 		raylib.StopMusicStream(game_state.assets.menu_music)
 		game_state.scene = .World
+        game_state.world = {}
+        world_init(&game_state.world, game_state)
 	}
 
 	credits_rect := raylib.Rectangle {
